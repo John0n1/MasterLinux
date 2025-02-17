@@ -1,0 +1,12 @@
+Package: masterlinux
+Version: 1.0-1
+Architecture: all
+Maintainer: John Hauger Mitander <john@mitander.io>
+Installed-Size: 7
+Depends: python3-pyqt6
+Section: utils
+Priority: optional
+Homepage: http://github.com/john0n1/MasterLinux/
+Description: ISO Master Builder - Customize and repackage ISO images using a GUI
+ A tool that extracts, customizes (via chroot terminal), and repackages ISO images.
+ It includes package management, boot logo, kernel selection, and advanced compression options.

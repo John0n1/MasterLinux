@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+# Minimal debian/rules using dh
+
+%:
+	dh $@ --with python3
+
+override_dh_auto_install:
+	# ...existing install steps...
+	# Install all project files to usr/share/masterlinux
+	mkdir -p $(DESTDIR)/usr/share/masterlinux
+	cp -r * $(DESTDIR)/usr/share/masterlinux/

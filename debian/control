@@ -1,0 +1,15 @@
+Source: masterlinux
+Section: utils
+Priority: optional
+Maintainer: John Hauger Mitander <john@mitander.io>
+Build-Depends: debhelper (>= 11), dh-python, python3, python3-pyqt6
+Standards-Version: 4.5.1
+X-Python-Version: 3.12
+Homepage: http://github.com/john0n1/MasterLinux/
+
+Package: masterlinux
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, python3-pyqt6
+Description: ISO Master Builder - Customize and repackage ISO images using a GUI
+ A tool that extracts, customizes (via chroot terminal), and repackages ISO images.
+ It includes package management, boot logo, kernel selection, and advanced compression options.
