@@ -1,14 +1,51 @@
+import sys
+import subprocess
+import os
+import time
+import threading
 import shutil
-import os, sys, subprocess
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QGroupBox, QMessageBox, QProgressBar, QPlainTextEdit, QTableView, QHeaderView, QComboBox, QCheckBox, QListView, QDialog, QFormLayout, QSpinBox, QRadioButton, QButtonGroup
+from PyQt6.QtWidgets import (
+    QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout,
+    QHBoxLayout, QFileDialog, QGroupBox, QMessageBox, QProgressBar,
+    QPlainTextEdit, QTableView, QHeaderView, QCheckBox,
+    QStyledItemDelegate, QFormLayout, QStyleOptionButton
+)
 from PyQt6.QtGui import QIcon, QFont, QTextCursor, QPixmap
 from PyQt6.QtCore import Qt
-
-# Import custom modules
-from widgets import ElidedLabel, CenteredIconDelegate
+from widgets import *
+from dialogs import PreseedDialog, KernelSelectionDialog, AdvancedCompressionDialog
 from threads import CommandRunnerThread
 from package_models import PackageListModel, PackageSortFilterProxyModel
-from dialogs import PreseedDialog, KernelSelectionDialog, AdvancedCompressionDialog
+
+# ... (ElidedLabel, CommandRunnerThread, PackageListModel, PackageSortFilterProxyModel, PreseedDialog, KernelSelectionDialog, AdvancedCompressionDialog classes - no changes needed)
+
+class CenteredIconDelegate(QStyledItemDelegate):
+    """
+    A delegate to center the checkbox in the table view.
+    """
+    def paint(self, painter, option, index):
+        if index.column() == 0:
+            checkbox_rect = option.rect.adjusted(0, 0, -option.rect.width() + option.rect.height(), 0)  # Square
+            checkbox_rect.moveCenter(option.rect.center())
+
+            if index.data(Qt.ItemDataRole.CheckStateRole) == Qt.CheckState.Checked:
+                state = Qt.CheckState.Checked
+            else:
+                state = Qt.CheckState.Unchecked
+
+            # Draw the checkbox using QStyleOptionButton
+            opt = QStyleOptionButton() # Use QStyleOptionButton here
+            opt.rect = checkbox_rect
+            opt.state = state
+            opt.palette = option.palette # Use the correct palette
+            opt.features = QStyleOptionButton.ButtonFeature.AutoDefaultButton # Ensure checkbox style
+            opt.ButtonType = QStyleOptionButton.ButtonType.CheckBox # Explicitly set button type
+
+
+            option.style().drawControl(option.style().ControlElement.CE_CheckBox, opt, painter) # Now opt is correct type
+        else:
+            super().paint(painter, option, index)
+
 
 class ISOMasterBuilderApp(QWidget):
     def __init__(self):
@@ -351,7 +388,8 @@ class ISOMasterBuilderApp(QWidget):
 
         try:
             iso_path =  self.iso_file_path.text()
-            cmd = ["xorriso", "-indev", iso_path, "-report_system_id", "-", "-report_application_id", "-"]
+            # Corrected xorriso command for older versions
+            cmd = ["xorriso", "-indev", iso_path, "-report_system_area", "as_mkisofs"] 
             process = subprocess.run(cmd, capture_output=True, text=True, check=True)
             output_lines = process.stdout.strip().split('\n')
             iso_name = "Unknown"
