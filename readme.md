@@ -1,4 +1,4 @@
-# ISO Master Builder
+# MasterLinux ISO Builder
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
@@ -38,7 +38,7 @@ The code is organized into several modules:
 1.  **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/john0n1/linuxmkr.git 
+    git clone https://github.com/john0n1/MasterLinux.git 
     cd linuxmkr
     ```
 
